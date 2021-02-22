@@ -143,7 +143,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
    });
 
-   // const modalTimeId = setTimeout(openModal, 10000); // вызываем модельное окно через 10 секунд
+   const modalTimeId = setTimeout(openModal, 10000); // вызываем модельное окно через 10 секунд
 
    function showModalByScroll() {
       if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
@@ -170,7 +170,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
 
       changeToRuble() { // метод, который конвентирует $ в руб
-         this.price = this.price * this.transfer;
+         this.price = +this.price * this.transfer;
       }
 
       render() { // метод позволяет сформировать верстку
@@ -178,30 +178,57 @@ window.addEventListener('DOMContentLoaded', () => {
          // и копируем нашу карточку из html 
          element.innerHTML = `
          <div class="menu__item">
-               <img src="img/tabs/vegy.jpg" alt="vegy">
-               <h3 class="menu__item-subtitle">Меню "Фитнес"</h3>
-               <div class="menu__item-descr">Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих
-               овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной
-               ценой и высоким качеством!</div>
+               <img src=${this.src} alt=${this.alt}>
+               <h3 class="menu__item-subtitle">${this.title}</h3>
+               <div class="menu__item-descr">${this.descr}</div>
                <div class="menu__item-divider"></div>
                <div class="menu__item-price">
                   <div class="menu__item-cost">Цена:</div>
-                  <div class="menu__item-total"><span>650</span> руб/день</div>
+                  <div class="menu__item-total"><span>${this.price}</span> руб/день</div>
                </div>
          </div>
       `;
+      this.parent.append(element); // помещаем наш созданные элемент во внутрь того же эллемента 
       }
 
    }
 
+   // const div = new MenuCard();  -- можно пиисать так и это правильно
+   // div.render();
+   // либо сделать так new MenuCard().render(); осле обработки он исчезнет и на него не будет ссылок 
 
+   new MenuCard(
+      "img/tabs/vegy.jpg",
+      "vegy",
+      'Меню "Фитнес"',
+      `Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и
+       фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной
+       ценой и высоким качеством!`,
+       15,
+       '.menu .container'
+   ).render(); 
 
+   new MenuCard(
+      "img/tabs/elite.jpg",
+      "elite",
+      'Меню “Премиум"',
+      `В меню “Премиум” мы используем не только красивый дизайн упаковки, но
+      и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода
+      в ресторан!`,
+       10,
+       '.menu .container'
+   ).render(); 
 
-
-
-
-
-
+   new MenuCard(
+      "img/tabs/post.jpg",
+      "post",
+      'Меню "Постное"',
+      `Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие
+      продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное
+      количество белков за счет тофу и импортных вегетарианских стейков.`,
+       5,
+       '.menu .container'
+   ).render(); 
 
 
 });
