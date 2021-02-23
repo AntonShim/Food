@@ -158,12 +158,13 @@ window.addEventListener('DOMContentLoaded', () => {
    // создаем карточки товаров с помощью классов
 
    class MenuCard {
-      constructor(src, alt, title, descr, price, parentSelector) {
+      constructor(src, alt, title, descr, price, parentSelector, ...classes) {
          this.src = src;
          this.alt = alt;
          this.title = title;
          this.descr = descr;
          this.price = price;
+         this.classes = classes;
          this.parent = document.querySelector(parentSelector); 
          this.transfer = 75; // курс валют рубл к доллару.
          this.changeToRuble(); // вызываем метод конвентирования прям в конструкторе
@@ -175,9 +176,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
       render() { // метод позволяет сформировать верстку
          const element = document.createElement('div');
+         if (this.classes.length === 0) { // если класс не будет,мы  подставляем указываем class по умлочанию
+            this.element = 'menu__item';
+            element.classList.add(this.element);
+         } else { // если будет какой-то класс, то перебираем массив и добавляем его.
+            this.classes.forEach(className => element.classList.add(className));
+         }
          // и копируем нашу карточку из html 
          element.innerHTML = `
-         <div class="menu__item">
                <img src=${this.src} alt=${this.alt}>
                <h3 class="menu__item-subtitle">${this.title}</h3>
                <div class="menu__item-descr">${this.descr}</div>
@@ -186,7 +192,6 @@ window.addEventListener('DOMContentLoaded', () => {
                   <div class="menu__item-cost">Цена:</div>
                   <div class="menu__item-total"><span>${this.price}</span> руб/день</div>
                </div>
-         </div>
       `;
       this.parent.append(element); // помещаем наш созданные элемент во внутрь того же эллемента 
       }
@@ -205,7 +210,9 @@ window.addEventListener('DOMContentLoaded', () => {
        фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной
        ценой и высоким качеством!`,
        15,
-       '.menu .container'
+       '.menu .container',
+       // здесь мы не указываем rest оператор классов, но он добавляется у нас как элемент
+       // по умолчанию в 179 строке
    ).render(); 
 
    new MenuCard(
@@ -216,7 +223,8 @@ window.addEventListener('DOMContentLoaded', () => {
       и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода
       в ресторан!`,
        10,
-       '.menu .container'
+       '.menu .container',
+       'menu__item'   
    ).render(); 
 
    new MenuCard(
@@ -227,7 +235,8 @@ window.addEventListener('DOMContentLoaded', () => {
       продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное
       количество белков за счет тофу и импортных вегетарианских стейков.`,
        5,
-       '.menu .container'
+       '.menu .container',
+       'menu__item'
    ).render(); 
 
 

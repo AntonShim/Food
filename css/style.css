@@ -505,6 +505,11 @@ a {
    object-fit: cover
 }
 
+.menu__item:hover {
+   background-color:wheat;
+   transition: .4s all;
+}
+
 .menu__item-subtitle {
    font-weight: 700;
    font-size: 18px;
