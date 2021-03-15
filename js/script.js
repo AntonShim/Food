@@ -239,5 +239,52 @@ window.addEventListener('DOMContentLoaded', () => {
        'menu__item'
    ).render(); 
 
+   //урок 53, реализация скрипта отправки данных на сервер
+   // Forms
+
+   const forms = document.querySelectorAll('form'); // получаем все формы, которые есть на странице
+
+   const message = { 
+      loading: 'Загрузка',
+      success: 'Спасибо! Скоро мы с вами свяжемся',
+      failure: 'Что-то пошло не так...'
+   };
+
+   forms.forEach(item => {
+      postData(item);
+   });
+
+   function postData(form) { // функция, которая отвечает за постинг данных
+      form.addEventListener('submit', (e) => {
+         e.preventDefault(); // отменяем стандартное поведение.
+
+         const statusMessage = document.createElement('div');
+         statusMessage.classList.add('status');
+         statusMessage.textContent = message.loading;
+         form.append(statusMessage);
+
+         const request = new XMLHttpRequest();
+         request.open('POST', 'server.php');
+         
+         // request.setRequestHeader('Content-type', 'multipart/form-data');
+         const formData = new FormData(form); //все данные в форме, получаем в js и отправляем на сервер
+
+         request.send(formData); // отправялем данные formData
+
+         request.addEventListener('load', () => { // проверяем статус выполнения
+            if (request.status === 200) {
+               console.log(request.response);
+               statusMessage.textContent = message.success;
+               form.reset(); // чистим форму от текста после ввода
+               setTimeout(() => { // убираем статус после отправки ввода
+                  statusMessage.remove();
+               }, 2000);
+            } else {
+               statusMessage.textContent = message.failure;
+            }
+         });
+      });
+   }
+
 
 });
