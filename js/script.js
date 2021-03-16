@@ -266,17 +266,24 @@ window.addEventListener('DOMContentLoaded', () => {
          const request = new XMLHttpRequest();
          request.open('POST', 'server.php');
          
-         // request.setRequestHeader('Content-type', 'multipart/form-data');
+         request.setRequestHeader('Content-type', 'application/json');
          const formData = new FormData(form); //все данные в форме, получаем в js и отправляем на сервер
 
-         request.send(formData); // отправялем данные formData
+         const object = {}; // так мы из формата, получаем обычные обьекты, которые можно конвертировать в json
+         formData.forEach(function(value, key){
+            object[key] = value;
+         });
+
+         const json = JSON.stringify(object);
+
+         request.send(json); // отправялем данные formData
 
          request.addEventListener('load', () => { // проверяем статус выполнения
             if (request.status === 200) {
                console.log(request.response);
                statusMessage.textContent = message.success;
                form.reset(); // чистим форму от текста после ввода
-               setTimeout(() => { // убираем статус после отправки ввода
+               setTimeout(() => { // убираем статус после отправки ввода через 2 секунды
                   statusMessage.remove();
                }, 2000);
             } else {
